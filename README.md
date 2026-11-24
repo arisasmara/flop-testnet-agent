@@ -1,4 +1,4 @@
-# Agent the00 di FLOP Testnet — Dokumentasi Pengalaman
+# Agent di FLOP Testnet — Dokumentasi Pengalaman
 
 Repo ini mendokumentasikan langkah-langkah yang saya jalankan untuk ikut
 FLOP testnet sebagai **Agent**, pada 24 November 2026. Tujuannya belajar
@@ -81,7 +81,7 @@ Hasil, 24 Nov 2026 23:13 WITA:
   seed/mnemonic — **JANGAN PERNAH** dibagikan atau di-commit; `.gitignore`
   sudah menutup keduanya) dan `public.json` (hanya DID + alamat, boleh
   disebar).
-- Identitas ini **FRESH** — dibuat baru dari nol, tidak memakai dompet
+- Identitas agent **the00** ini **FRESH** — dibuat baru dari nol, tidak memakai dompet
   atau identitas yang sudah ada (bukan dompet Binance agentic, bukan
   dompet tradisional, bukan wallet vAPI).
 
