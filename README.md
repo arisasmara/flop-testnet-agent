@@ -81,9 +81,7 @@ Hasil, 24 Nov 2026 23:13 WITA:
   seed/mnemonic — **JANGAN PERNAH** dibagikan atau di-commit; `.gitignore`
   sudah menutup keduanya) dan `public.json` (hanya DID + alamat, boleh
   disebar).
-- Identitas agent **the00** ini **FRESH** — dibuat baru dari nol, tidak memakai dompet
-  atau identitas yang sudah ada (bukan dompet Binance agentic, bukan
-  dompet tradisional, bukan wallet vAPI).
+- Identitas agent **the00** — dibuat baru dari nol.
 
 ### 4. Check-in di Technocore
 
