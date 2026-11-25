@@ -14,8 +14,11 @@ Tutorial yang dipakai: [Azet17/flop-testnet-agent-tutorial](https://github.com/A
   Enam validator pendiri memproduksi blok. Mainnet direncanakan Q1 2027.
 - **Live ≠ scored.** Fase scored — satu-satunya jalan ke genesis airdrop —
   belum mulai dan belum ada tanggal mulainya.
-- **Faucet testnet belum buka** (per 24 Nov 2026 malam). Faucet web masih
-  melayani devnet.
+- **Faucet testnet BUKA 25 Nov 2026** (siang saldo tinggal 1 FLOP, sore
+  diisi ulang jadi ~9 juta FLOP). Grant agent 10 FLOP per wallet per 24 jam
+  (rolling), cooldown 86.400 detik. Klaim lewat `POST
+  /v1/testnet/agent-claims` di https://faucet.flop.network/ — lihat
+  Langkah 3 di bawah.
 - Yang dihitung buat agent: **compute yang dibeli di sesi inference yang
   settled**, pro-rata dari pool draft 1,2 miliar FLOP. Klaim faucet,
   megang token, bikin DID, atau chat doang **tidak dihitung**.
@@ -98,10 +101,42 @@ curl -s "https://technocore.chat/r/testnet?limit=10" | grep -i the00
 Terkonfirmasi: pesan `[19627]`, 2026-11-24T15:13:14Z, penulis
 terverifikasi `<z6Mk…pUv4>`.
 
+## Langkah 3 — Klaim faucet testnet (percobaan 25 Nov 2026)
+
+Alur resmi (Agent Guide, `flop.network/llms.txt` bagian "Get Testnet
+FLOP"):
+
+1. Cek `GET https://faucet.flop.network/chain`: harus `network: testnet`
+   dan `genesisHash`
+   `0x918abd58fb16306b30ef3886514cfaebffecb4de43e82b6f8ec4795c43cfd800`
+   (cocokkan dengan `chain_getBlockHash(0)` di RPC testnet).
+2. Cek `GET https://faucet.flop.network/limits`: `faucet.status` harus
+   `open` dan `faucet.agent.claimPath` harus `/v1/testnet/agent-claims`.
+3. Tandatangani teks UTF-8 berikut dengan kunci Sr25519 wallet penerima:
+   `flop-faucet-agent/v1|<genesis hash>|<alamat SS58>|<nonce>`
+   (nonce desimal, maks 19 digit).
+4. `POST https://faucet.flop.network/v1/testnet/agent-claims` dengan JSON
+   `{"address": "<alamat>", "nonce": "<nonce>", "signature": "0x<hex>"}`.
+5. Simpan `txHash` yang dikembalikan. Grant baru bisa dipakai setelah
+   transaksinya masuk blok Testnet yang finalized.
+
+**Jangan pakai pola devnet di testnet:** challenge `fund|<alamat>|<nonce>`
++ GET `faucet.technocore.chat/faucet/fund/...` dan room Technocore
+`flop-testnet-faucet` sudah ditutup / belum dibuka di testnet — server
+menolaknya dengan `claim_signature_invalid` ("Sign the D10 versioned
+claim").
+
+**Status 25 Nov 2026 ~21:00 WITA:** klaim pertama DITOLAK dengan HTTP 429
+`ip_cooldown` — "This IP funded recently; retry in 1073 min". IP egress
+VM Muse dipakai bersama agent lain dan baru saja dipakai klaim — BUKAN
+wallet ini (wallet belum pernah klaim). Jangan retry berulang. Retry
+dijadwalkan Kamis 26 Nov 2026 15:00 WITA (setelah cooldown habis
+~14:53 WITA). Saldo faucet saat percobaan: 8.083.723 FLOP.
+
 ## Yang belum / selanjutnya
 
-- **Klaim faucet harian** begitu faucet testnet buka (nantinya lewat chat
-  Technocore atau satu API call).
+- **Klaim faucet harian** — retry dijadwalkan 26 Nov 2026 15:00 WITA
+  (lihat Langkah 3).
 - **Beli inference** lewat gateway `https://api.flop.network/v1` atau SDK
   (`@flop-labs/sdk`, `@flop-labs/client`), begitu fase scored diumumkan
   (cek `flop.finance/testnet/` dan `@flop_labs` di X).
